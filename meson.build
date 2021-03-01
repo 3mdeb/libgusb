@@ -93,7 +93,7 @@ add_project_link_arguments(
   language: 'c'
 )
 
-if host_machine.system() == 'freebsd'
+if host_machine.system() != 'linux'
   libusb_version = '>= 1.0.9'
 else
   libusb_version = '>= 1.0.19'

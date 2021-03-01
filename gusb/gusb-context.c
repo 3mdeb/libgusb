@@ -444,7 +444,7 @@ g_usb_context_rescan (GUsbContext *context)
 	libusb_free_device_list (dev_list, 1);
 }
 
-#ifndef __FreeBSD__
+#ifdef __linux__
 static gboolean
 g_usb_context_rescan_cb (gpointer user_data)
 {
@@ -518,7 +518,7 @@ g_usb_context_enumerate (GUsbContext *context)
 		return;
 
 	g_usb_context_rescan (context);
-#ifndef __FreeBSD__
+#ifdef __linux__
 	if (!libusb_has_capability (LIBUSB_CAP_HAS_HOTPLUG)) {
 		g_debug ("platform does not do hotplug, using polling");
 		priv->hotplug_poll_id = g_timeout_add_seconds (1,
@@ -620,7 +620,7 @@ g_usb_context_initable_init (GInitable     *initable,
 					   context);
 
 	/* watch for add/remove */
-#ifndef __FreeBSD__
+#ifdef __linux__
 	if (libusb_has_capability (LIBUSB_CAP_HAS_HOTPLUG)) {
 #endif
 		rc = libusb_hotplug_register_callback (priv->ctx,
@@ -637,7 +637,7 @@ g_usb_context_initable_init (GInitable     *initable,
 			g_warning ("Error creating a hotplug callback: %s",
 				   g_usb_strerror (rc));
 		}
-#ifndef __FreeBSD__
+#ifdef __linux__
 	}
 #endif
 

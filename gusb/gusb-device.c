@@ -253,7 +253,7 @@ g_usb_device_initable_init (GInitable     *initable,
 	 * libusb_get_port_numbers because it needs the fd to call ioctl. */
 #define PORT_NUMBER_MAX 64
 	priv->port_numbers = g_array_new (FALSE, FALSE, sizeof (guint8));
-#ifdef __FreeBSD__
+#ifndef __linux__
 	g_return_val_if_fail (priv->handle == NULL, FALSE);
 	if (libusb_open (priv->device, &priv->handle) == LIBUSB_SUCCESS) {
 #endif
@@ -265,7 +265,7 @@ g_usb_device_initable_init (GInitable     *initable,
 			g_array_set_size (priv->port_numbers, port_count);
 			memcpy (priv->port_numbers->data, ports, port_count);
 		}
-#ifdef __FreeBSD__
+#ifndef __linux__
 		libusb_close (priv->handle);
 		priv->handle = NULL;
 	}
@@ -1591,7 +1591,7 @@ g_usb_device_get_platform_id (GUsbDevice *device)
 static libusb_device *
 g_usb_device_get_parent_libusb_device (GUsbDevice *device)
 {
-#ifdef __FreeBSD__
+#ifndef __linux__
 	GPtrArray *devices = NULL;
 	GUsbDevice *device_tmp;
 	gboolean found = FALSE;

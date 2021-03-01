@@ -33,12 +33,12 @@ gusb_device_func (void)
 	device = G_USB_DEVICE (g_ptr_array_index (array, 0));
 
 	/* Root hubs on FreeBSD have vid and pid set to zero */
-#ifdef __FreeBSD__
+#ifndef __linux__
 	if (g_usb_device_get_parent (device) != NULL) {
 #endif
 		g_assert_cmpint (g_usb_device_get_vid (device), >, 0x0000);
 		g_assert_cmpint (g_usb_device_get_pid (device), >, 0x0000);
-#ifdef __FreeBSD__
+#ifndef __linux__
 	}
 #endif
 
@@ -95,12 +95,12 @@ gusb_context_func (void)
 	for (i = 0; i < array->len; i++) {
 		device = G_USB_DEVICE (g_ptr_array_index (array, i));
 
-#ifdef __FreeBSD__
+#ifndef __linux__
 		if (g_usb_device_get_parent (device) != NULL) {
 #endif
 			g_assert_cmpint (g_usb_device_get_vid (device), >, 0x0000);
 			g_assert_cmpint (g_usb_device_get_pid (device), >, 0x0000);
-#ifdef __FreeBSD__
+#ifndef __linux__
 		}
 #endif
 
